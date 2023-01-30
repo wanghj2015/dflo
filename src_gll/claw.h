@@ -351,7 +351,7 @@ private:
    void get_cell_average(const typename dealii::DoFHandler<dim>::cell_iterator& cell,
                          dealii::Vector<double>& avg) const
    {
-      if(cell->active())
+      if(cell->is_active())
       {
          unsigned int cell_no = cell_number(cell);
          for(unsigned int c=0; c<EulerEquations<dim>::n_components; ++c)

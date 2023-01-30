@@ -229,7 +229,7 @@ void ConservationLaw<dim>::set_initial_condition_Rayleigh_Taylor (const double e
    
    // NOTE: We get multiple sets of same support points since fe is an FESystem
    Quadrature<dim> qsupport (fe.get_unit_support_points());
-   FEValues<dim>   fe_values (mapping(), fe, qsupport, update_q_points);
+   FEValues<dim>   fe_values (mapping(), fe, qsupport, update_quadrature_points);
    
    std::vector<unsigned int> dof_indices (fe.dofs_per_cell);
    double rho, pressure, v;
@@ -293,7 +293,7 @@ void ConservationLaw<dim>::set_initial_condition_shocktube ()
    
    // NOTE: We get multiple sets of same support points since fe is an FESystem
    Quadrature<dim> qsupport (fe.get_unit_support_points());
-   FEValues<dim>   fe_values (mapping(), fe, qsupport, update_q_points);
+   FEValues<dim>   fe_values (mapping(), fe, qsupport, update_quadrature_points);
    
    std::vector<unsigned int> dof_indices (fe.dofs_per_cell);
    double rho, pressure, v;

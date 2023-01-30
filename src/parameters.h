@@ -9,7 +9,8 @@
 #include <deal.II/base/conditional_ostream.h>
 
 #include <deal.II/lac/vector.h>
-#include <deal.II/lac/compressed_sparsity_pattern.h>
+
+//#include <deal.II/lac/compressed_sparsity_pattern.h>
 
 #include <deal.II/grid/tria.h>
 #include <deal.II/grid/grid_generator.h>

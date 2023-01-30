@@ -57,13 +57,9 @@ Postprocessor (const bool do_schlieren_plot)
 // comment out their names.
 template <int dim>
 void
-EulerEquations<dim>::Postprocessor::
-compute_derived_quantities_vector (const std::vector<Vector<double> >              &uh,
-                                   const std::vector<std::vector<Tensor<1,dim> > > &duh,
-                                   const std::vector<std::vector<Tensor<2,dim> > > &/*dduh*/,
-                                   const std::vector<Point<dim> >                  &/*normals*/,
-                                   const std::vector<Point<dim> >                  &evaluation_points,
-                                   std::vector<Vector<double> >                    &computed_quantities) const
+EulerEquations<dim>::Postprocessor::evaluate_vector_field
+(const DataPostprocessorInputs::Vector<dim> &input_data,
+ std::vector<Vector<double>>                &computed_quantities) const
 {
    // At the beginning of the function, let us
    // make sure that all variables have the
@@ -80,6 +76,8 @@ compute_derived_quantities_vector (const std::vector<Vector<double> >           
    // we check that at least the first element
    // of the outer vector has the correct
    // inner size:
+   const std::vector<Vector<double>>& uh = input_data.solution_values;
+   const std::vector<std::vector<Tensor<1,dim>>>& duh = input_data.solution_gradients;
    const unsigned int n_quadrature_points = uh.size();
    
    if (do_schlieren_plot == true)
@@ -172,9 +170,9 @@ UpdateFlags
 EulerEquations<dim>::Postprocessor::get_needed_update_flags () const
 {
   if (do_schlieren_plot == true)
-    return update_values | update_gradients | update_q_points;
+    return update_values | update_gradients | update_quadrature_points;
   else
-    return update_values | update_q_points;
+    return update_values | update_quadrature_points;
 }
 
 

@@ -368,6 +368,6 @@ void ConservationLaw<dim>::compute_mu_shock ()
          for(unsigned int i=0; i<fe1.dofs_per_cell; ++i)
             mu_shock(cell_no) += 0.25 * mu_tmp(dof_indices[i]);
      }
-}//*/
+}*/
 
 template class ConservationLaw<2>;

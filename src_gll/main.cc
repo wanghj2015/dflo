@@ -27,8 +27,11 @@ int main (int argc, char *argv[])
       Utilities::MPI::MPI_InitFinalize mpi_initialization (argc, argv, n_threads);
       ParameterHandler prm;
       Parameters::AllParameters<2>::declare_parameters (prm);
-      bool status = prm.read_input (argv[1], true);
-      AssertThrow( status, ExcFileNotOpen(argv[1]) );
+
+      //bool status = prm.parse_input (argv[1], true);
+      //AssertThrow( status, ExcFileNotOpen(argv[1]) );
+      prm.parse_input (argv[1]);
+
       prm.print_parameters(std::cout, ParameterHandler::Text);
       unsigned int degree  = prm.get_integer("degree"); // Degree of FEM
       std::string basis = prm.get("basis");
@@ -43,7 +46,7 @@ int main (int argc, char *argv[])
       timer.stop ();
 
       std::cout << std::endl;
-      std::cout << "Elapsed CPU time : " << timer()/60 << " min.\n";
+      std::cout << "Elapsed CPU time : " << timer.cpu_time()/60 << " min.\n";
       std::cout << "Elapsed wall time: " << timer.wall_time()/60 << " min.\n";
    }
    catch (std::exception &exc)

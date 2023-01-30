@@ -6,7 +6,8 @@
 #include <deal.II/base/conditional_ostream.h>
 
 #include <deal.II/lac/vector.h>
-#include <deal.II/lac/compressed_sparsity_pattern.h>
+//#include <deal.II/lac/compressed_sparsity_pattern.h>
+#include <deal.II/lac/dynamic_sparsity_pattern.h>
 
 #include <deal.II/grid/tria.h>
 #include <deal.II/grid/grid_generator.h>
@@ -14,7 +15,7 @@
 #include <deal.II/grid/tria_accessor.h>
 #include <deal.II/grid/tria_iterator.h>
 #include <deal.II/grid/grid_in.h>
-#include <deal.II/grid/tria_boundary_lib.h>
+//#include <deal.II/grid/tria_boundary_lib.h>
 
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/dofs/dof_accessor.h>
@@ -24,6 +25,7 @@
 #include <deal.II/fe/fe_values.h>
 #include <deal.II/fe/fe_system.h>
 #include <deal.II/fe/mapping_q1.h>
+#include <deal.II/fe/mapping_q.h>
 #include <deal.II/fe/mapping_cartesian.h>
 #include <deal.II/fe/fe_dgq.h>
 #include <deal.II/fe/fe_dgp.h>
@@ -129,7 +131,7 @@ void ConservationLaw<dim>::read_parameters (const char *input_filename)
    ParameterHandler prm;
    Parameters::AllParameters<dim>::declare_parameters (prm);
    
-   prm.read_input (input_filename);
+   prm.parse_input (input_filename);
    parameters.parse_parameters (prm);
    
    verbose_cout.set_condition (parameters.output == Parameters::Solver::verbose);
@@ -610,7 +612,7 @@ ConservationLaw<dim>::compute_angular_momentum ()
    
    FEValues<dim> fe_values (mapping(), fe,
                             quadrature_formula,
-                            update_values | update_q_points | update_JxW_values);
+                            update_values | update_quadrature_points | update_JxW_values);
    const FEValuesExtractors::Vector momentum (0);
    std::vector< Tensor<1,dim> > momentum_values(n_q_points);
    

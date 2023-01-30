@@ -81,7 +81,7 @@ void ConservationLaw<dim>::apply_limiter_TVB_Qk_deprecated ()
    FEValues<dim>     fe_values_y (mapping(), fe, qrule_y, update_values);
    
    Quadrature<dim> qsupport (fe.get_unit_support_points());
-   FEValues<dim>   fe_values (mapping(), fe, qsupport, update_q_points);
+   FEValues<dim>   fe_values (mapping(), fe, qsupport, update_quadrature_points);
    
    std::vector<Vector<double> > face_values_x(2,
                                               Vector<double>(EulerEquations<dim>::n_components));
@@ -232,7 +232,7 @@ void ConservationLaw<dim>::apply_limiter_TVB_Qk ()
 
    // NOTE: We get multiple sets of same support points since fe is an FESystem
    Quadrature<dim> qsupport (fe.get_unit_support_points());
-   FEValues<dim>   fe_values (mapping(), fe, qsupport, update_q_points);
+   FEValues<dim>   fe_values (mapping(), fe, qsupport, update_quadrature_points);
    
    Vector<double> dfx (n_components);
    Vector<double> dbx (n_components);

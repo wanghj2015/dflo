@@ -1230,14 +1230,10 @@ struct EulerEquations
       
       virtual
       void
-      compute_derived_quantities_vector 
-         (const std::vector<dealii::Vector<double> >              &uh,
-          const std::vector<std::vector<dealii::Tensor<1,dim> > > &duh,
-          const std::vector<std::vector<dealii::Tensor<2,dim> > > &dduh,
-          const std::vector<dealii::Point<dim> >                  &normals,
-          const std::vector<dealii::Point<dim> >                  &evaluation_points,
-          std::vector<dealii::Vector<double> >                    &computed_quantities) const;
-      
+      evaluate_vector_field
+      (const dealii::DataPostprocessorInputs::Vector<dim> &input_data,
+       std::vector<dealii::Vector<double>>                &computed_quantities) const;
+
       virtual std::vector<std::string> get_names () const;
       
       virtual

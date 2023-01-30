@@ -18,7 +18,8 @@
 #include <deal.II/fe/fe_values.h>
 #include <deal.II/fe/fe_system.h>
 #include <deal.II/fe/mapping_q1.h>
-#include <deal.II/fe/fe_dgq.h>
+//#include <deal.II/fe/fe_dgq.h>
+#include <deal.II/fe/fe_q.h>
 
 #include <deal.II/numerics/data_out.h>
 #include <deal.II/numerics/vector_tools.h>
@@ -319,9 +320,9 @@ void ConservationLaw<dim>::compute_mu_shock ()
     integrator.info_box,
     0,
     boost::bind(&ConservationLaw<dim>::shock_boundary_term,
-                this, _1, _2),
+                this, std::placeholders::_1, std::placeholders::_2),
     boost::bind(&ConservationLaw<dim>::shock_face_term,
-                this, _1, _2, _3, _4),
+                this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4),
     integrator.assembler);
 
    MeshWorker::loop<dim,dim,MeshWorker::DoFInfo<dim>,MeshWorker::IntegrationInfoBox<dim> >
@@ -330,7 +331,7 @@ void ConservationLaw<dim>::compute_mu_shock ()
     integrator.dof_info, 
     integrator.info_box,
     boost::bind(&ConservationLaw<dim>::shock_cell_term, 
-                this, _1, _2),
+                this, std::placeholders::_1, std::placeholders::_2),
     0,
     0,
     integrator.assembler);
