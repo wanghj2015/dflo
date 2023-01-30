@@ -654,11 +654,11 @@ void ConservationLaw<dim>::assemble_system (IntegratorImplicit<dim>& integrator)
     integrator.dof_info, 
     integrator.info_box,
     boost::bind(&ConservationLaw<dim>::integrate_cell_term, 
-                this, std::placeholders::_1, std::placeholders::_2),
+                this, _1, _2),
     boost::bind(&ConservationLaw<dim>::integrate_boundary_term,
-                this, std::placeholders::_1, std::placeholders::_2),
+                this, _1, _2),
     boost::bind(&ConservationLaw<dim>::integrate_face_term,
-                this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4),
+                this, _1, _2, _3, _4),
     integrator.assembler);
 }
 
