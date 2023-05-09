@@ -99,6 +99,68 @@ void RadialRayleighTaylor<dim>::vector_value (const Point<dim> &p,
    values[EulerEquations<dim>::energy_component] =  pressure/(EulerEquations<dim>::gas_gamma - 1.0);
 }
 
+
+
+//-------------------------------------------------------
+// Initial condition for rising thermal bubble problem
+//-------------------------------------------------------
+template <int dim>
+void RisingThermalBubble<dim>::vector_value (const Point<dim> &p,
+                                             Vector<double>   &values) const
+{
+    const double gravity = 9.8;
+
+    const double gamma = 1.4;
+    const double R_gas = 287.058;
+    const double inv_gamma_m1 = 1.0 / (gamma - 1.0);
+    const double Cp = gamma * inv_gamma_m1 * R_gas;
+
+    const double T0 = 300.0;
+    const double P0 = 1.0e5;
+    const double rho0 = P0 / (R_gas * T0);
+
+    const double theta_c = 0.5;
+    const double x_c = 500.0;
+    const double y_c = 350.0;
+    //const double y_c = 260.0;
+    const double r_c = 250.0;
+
+
+    const double r = std::sqrt(std::pow(p[0] - x_c, 2.0) + 
+                               std::pow(p[1] - y_c, 2.0));
+
+    // perturbation of potential temperature
+    const double dtheta = (r > r_c) ? 0.0 : 0.5 * theta_c * (1.0 + std::cos(M_PI * r / r_c));
+
+    const double theta = T0 + dtheta;
+
+    // Exner pressure
+    const double Pexner = 1.0 - (gravity / (Cp * T0)) * p[1];
+
+    const double rho = (P0 / (R_gas * theta)) * std::pow(Pexner, inv_gamma_m1);
+
+    const double pressure = rho * R_gas * theta * Pexner;
+
+
+    // Density
+    values[EulerEquations<dim>::density_component] = rho;
+
+    // Momentum
+    for (unsigned int d=0; d<dim; ++d)
+        values[d] = 0.0;
+
+    const double vel = 0.0;
+
+    // Energy
+    values[EulerEquations<dim>::energy_component] =
+        pressure/(EulerEquations<dim>::gas_gamma - 1.0)
+        + 0.5 * values[EulerEquations<dim>::density_component] * vel * vel;
+}
+
+
+
+
+
 //--------------------------------------------------------------------------------------------
 // Isothermal hydrostatic test case from Xing and Shu
 //--------------------------------------------------------------------------------------------
@@ -358,6 +420,11 @@ void ConservationLaw<dim>::set_initial_condition_Qk ()
    else if(parameters.ic_function == "rrt")
       VectorTools::interpolate(mapping(), dof_handler,
                                RadialRayleighTaylor<dim>(), old_solution);
+
+   else if(parameters.ic_function == "rtb")
+      VectorTools::interpolate(mapping(), dof_handler,
+                               RisingThermalBubble<dim>(parameters.gravity), old_solution);
+
    else if(parameters.ic_function == "isohydro")
       VectorTools::interpolate(mapping(), dof_handler,
                                IsothermalHydrostatic<dim>(), old_solution);

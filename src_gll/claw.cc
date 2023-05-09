@@ -200,7 +200,8 @@ const Mapping<dim,dim>& ConservationLaw<dim>::mapping() const
 template <int dim>
 void ConservationLaw<dim>::compute_cartesian_mesh_size ()
 {
-   const double geom_tol = 1.0e-12;
+   //const double geom_tol = 1.0e-12;
+   const double geom_tol = 1.0e-8;
    
    typename DoFHandler<dim>::active_cell_iterator
       cell = dof_handler.begin_active(),
@@ -1207,6 +1208,13 @@ void ConservationLaw<dim>::compute_errors ()
       VectorTools::interpolate(mapping(), dof_handler,
                                RadialRayleighTaylor<dim>(), old_solution);
    }
+
+   else if(parameters.ic_function == "rtb")
+   {
+      VectorTools::interpolate(mapping(), dof_handler,
+                               RisingThermalBubble<dim>(parameters.gravity), old_solution);
+   }
+
    else if(parameters.ic_function == "polyhydro")
    {
       VectorTools::interpolate(mapping(), dof_handler,

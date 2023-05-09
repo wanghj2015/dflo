@@ -66,6 +66,26 @@ private:
    const double drho  = 0.1;
 };
 
+
+//------------------------------------------------------------------------
+template <int dim>
+class RisingThermalBubble : public dealii::Function<dim>
+{
+public:
+   RisingThermalBubble (double gravity)
+   :
+   dealii::Function<dim>(EulerEquations<dim>::n_components),
+   gravity (gravity)
+   {}
+   virtual void vector_value (const dealii::Point<dim>  &p,
+                              dealii::Vector<double>  &values) const;
+
+private:
+   double gravity;
+};
+//------------------------------------------------------------------------
+
+
 //------------------------------------------------------------------------
 // Test case from Xing/Shu
 //------------------------------------------------------------------------
